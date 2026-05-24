@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<title>Happy Birthday!</title>
+<style>
+html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #050826; }
+.bd-root {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  inset: 0;
+  height: 100vh;
+  height: 100dvh;
+  width: 100vw; overflow: hidden;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 10%, rgba(108,143,255,0.35), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 85% 20%, rgba(160,120,255,0.28), transparent 65%),
+    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(80,200,220,0.22), transparent 70%),
+    radial-gradient(ellipse at top, #1a2580 0%, #1432a8 35%, #0e2288 65%, #050826 100%);
+  color: #dde6ff; font-family: 'Georgia', serif; user-select: none; -webkit-user-select: none;
+  display: flex; flex-direction: column; align-items: center; touch-action: manipulation;
+}
+.bd-root .stars, .bd-root .confetti-layer { position: fixed; top: 0; left: 0; right: 0; bottom: 0; inset: 0; pointer-events: none; z-index: 1; }
+
+.bd-root .star {
+  position: absolute; border-radius: 50%; opacity: 0;
+  top: 0;
+  animation: bd-fall linear infinite, bd-twinkle ease-in-out infinite;
+}
+@keyframes bd-fall {
+  0%   { transform: translateY(-20px) rotate(0); opacity: 0; }
+  8%   { opacity: 1; }
+  92%  { opacity: 0.7; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+}
+@keyframes bd-twinkle { 0%,100%{filter:brightness(1);} 50%{filter:brightness(1.8);} }
+
+.bd-root .title {
+  position: relative; z-index: 5; text-align: center; padding-top: 2vh;
+  font-size: clamp(1.6rem, 5vw, 3.5rem); font-weight: 900; letter-spacing: 1px;
+  color: #dde6ff;
+  animation: bd-outline 3s ease-in-out infinite alternate, bd-float 5s ease-in-out infinite;
+}
+.bd-root .title .name {
+  background: linear-gradient(90deg, #a0c0ff, #c8a8ff, #6c8fff, #a0c0ff);
+  background-size: 200% 100%;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+  font-style: italic;
+  animation: bd-shimmer 4s linear infinite;
+}
+@keyframes bd-shimmer { 0%{background-position:0% 50%;} 100%{background-position:200% 50%;} }
+@keyframes bd-outline {
+  0%   { text-shadow: 0 0 6px rgba(180,200,255,0.5), 0 0 18px rgba(108,143,255,0.25); }
+  50%  { text-shadow: 0 0 10px rgba(200,216,255,0.7), 0 0 26px rgba(140,180,255,0.4); }
+  100% { text-shadow: 0 0 6px rgba(180,200,255,0.5), 0 0 18px rgba(108,143,255,0.25); }
+}
+@keyframes bd-float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-4px);} }
+
+.bd-root .subtitle {
+  text-align: center; margin-top: 0.3rem; font-size: clamp(0.85rem,1.4vw,1.05rem);
+  color: #b8c8ff; font-style: italic; z-index: 5; position: relative;
+  animation: bd-sub-glow 2.4s ease-in-out infinite;
+}
+@keyframes bd-sub-glow {
+  0%,100% { text-shadow: 0 0 8px rgba(160,200,255,0.5), 0 0 16px rgba(108,143,255,0.35); }
+  50%     { text-shadow: 0 0 14px rgba(200,220,255,0.85), 0 0 28px rgba(140,180,255,0.6); }
+}
+
+.bd-root .photo-frame {
+  position: relative; z-index: 5; margin: 0.6rem auto 0;
+  width: clamp(100px, 16vh, 170px); height: clamp(100px, 16vh, 170px); border-radius: 50%;
+  background: conic-gradient(from 0deg, #4466ff, #a0b8ff, #c8a8ff, #6c8fff, #4466ff);
+  padding: 4px;
+  animation: bd-frame-spin 9s linear infinite, bd-frame-glow 3.5s ease-in-out infinite;
+}
+@keyframes bd-frame-spin { to { transform: rotate(360deg); } }
+@keyframes bd-frame-glow {
+  0%,100% { box-shadow: 0 8px 28px rgba(68,102,255,0.4), 0 0 24px rgba(108,143,255,0.3); }
+  50%     { box-shadow: 0 8px 34px rgba(108,143,255,0.6), 0 0 38px rgba(160,180,255,0.45); }
+}
+.bd-root .photo-frame img {
+  width:100%; height:100%; border-radius:50%; object-fit:cover; display:block; background:#1a2580;
+  animation: bd-photo-counter 9s linear infinite;
+}
+@keyframes bd-photo-counter { to { transform: rotate(-360deg); } }
+
+.bd-root .hint {
+  margin-top: .4rem; text-align: center; font-size: .85rem;
+  color: #8fa8e8; font-weight: 600; z-index: 5; position: relative;
+  animation: bd-pulse 1.6s ease-in-out infinite;
+}
+@keyframes bd-pulse {
+  0%,100%{ opacity:.65; text-shadow: 0 0 6px rgba(140,180,255,0.4); }
+  50%    { opacity:1;   text-shadow: 0 0 10px rgba(160,200,255,0.65); }
+}
+
+
+.bd-root .stage { position: relative; width: 100%; flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; z-index: 3; }
+.bd-root .cake-wrap { position: relative; width: min(70vw, 360px); height: 100%; max-height: min(55vh, 380px); }
+.bd-root .cake { width: 100%; height: 100%; overflow: visible; display: block; }
+
+.bd-root .half { transition: transform 1.2s cubic-bezier(.6,-.2,.3,1.4); transform-origin: center; transform-box: fill-box; }
+.bd-root .cut .half-left  { transform: translateX(-32%) rotate(-8deg); }
+.bd-root .cut .half-right { transform: translateX(32%)  rotate(8deg); }
+
+.bd-root .flame {
+  transform-origin: 50% 100%; transform-box: fill-box;
+  animation: bd-flicker .18s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 6px #ffb347) drop-shadow(0 0 14px #ff6a00);
+}
+@keyframes bd-flicker { from{transform:scale(1,1);} to{transform:scale(.92,1.08);} }
+
+.bd-root .knife {
+  position: absolute; z-index: 6;
+  width: clamp(80px, 22vw, 110px);
+  height: clamp(80px, 22vw, 110px);
+  transform: translate(-50%, -50%) rotate(-35deg);
+  cursor: grab; touch-action: none;
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,0.5));
+  transition: filter .3s, opacity .6s;
+}
+.bd-root .knife svg { width: 100%; height: 100%; pointer-events: none; }
+.bd-root .knife.dragging { cursor: grabbing; filter: drop-shadow(0 0 14px #6c8fff); }
+.bd-root .knife.gone { opacity: 0; pointer-events: none; }
+
+.bd-root .firework { position:absolute; width:6px; height:6px; border-radius:50%; pointer-events:none; z-index:9; }
+
+.bd-root .message {
+  position: fixed; left: 50%; top: 50%;
+  transform: translate(-50%, -50%) scale(.4); opacity: 0; z-index: 50;
+  text-align: center; padding: 2.2rem 2.6rem; border-radius: 26px;
+  background:
+    radial-gradient(ellipse at top, rgba(120,140,255,0.12), transparent 55%),
+    linear-gradient(135deg, rgba(30,55,150,0.55), rgba(20,15,90,0.62));
+  border: 1.5px solid rgba(160,190,255,0.35);
+  box-shadow:
+    0 0 20px rgba(68,102,255,0.2),
+    0 0 40px rgba(140,120,255,0.12),
+    inset 0 0 16px rgba(160,190,255,0.07);
+  backdrop-filter: blur(18px) saturate(1.2); -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  max-width: 90vw;
+  pointer-events: none;
+  transition: opacity 1s, transform 1s cubic-bezier(.2,1.4,.4,1);
+}
+.bd-root .message.show {
+  opacity: 1; transform: translate(-50%, -50%) scale(1);
+  pointer-events: auto;
+  animation: bd-msg-glow 4s ease-in-out infinite 1s;
+}
+@keyframes bd-msg-glow {
+  0%,100% { box-shadow: 0 0 20px rgba(68,102,255,0.2), 0 0 40px rgba(140,120,255,0.12), inset 0 0 16px rgba(160,190,255,0.07); }
+  50%     { box-shadow: 0 0 28px rgba(108,143,255,0.28), 0 0 55px rgba(180,140,255,0.16), inset 0 0 20px rgba(180,200,255,0.1); }
+}
+.bd-root .message h2 {
+  font-size: clamp(1.4rem, 3.5vw, 2.4rem);
+  background: linear-gradient(90deg, #a0c0ff, #dde6ff, #c8a8ff, #6c8fff);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent; margin-bottom: .8rem;
+}
+.bd-root .message p { font-size: clamp(.95rem,1.8vw,1.15rem); color: #d0deff; line-height: 1.55; }
+.bd-root .message .hearts { margin-top: 1rem; font-size: 1.6rem; }
+
+@media (max-width: 768px) {
+  .bd-root .message {
+    width: 92vw;
+    max-width: 92vw;
+    padding: 2rem 2rem;
+    border-radius: 20px;
+    box-sizing: border-box;
+  }
+  .bd-root .message h2 { font-size: 1.35rem; margin-bottom: .6rem; }
+  .bd-root .message p { font-size: 1rem; line-height: 1.5; }
+  .bd-root .message .hearts { margin-top: .75rem; font-size: 1.35rem; }
+}
+
+.bd-root .replay-btn {
+  display: inline-block; margin-top: 1.2rem;
+  background: rgba(68,102,255,0.25); border: 1.5px solid rgba(160,190,255,0.55);
+  color: #dde6ff; font-size: 0.9rem; font-family: 'Georgia', serif; font-style: italic;
+  padding: 0.5rem 1.2rem; border-radius: 20px; cursor: pointer;
+  backdrop-filter: blur(8px); transition: background 0.2s, transform 0.15s;
+  pointer-events: auto;
+}
+.bd-root .replay-btn:hover { background: rgba(68,102,255,0.5); transform: scale(1.05); }
+.bd-root .replay-btn:active { transform: scale(0.97); }
+
+.bd-root .bd-footer {
+  position: relative; z-index: 5; width: 100%; text-align: center; padding: 0.6rem 1rem;
+  font-family: 'Georgia', serif; font-weight: 700; font-style: italic;
+  font-size: clamp(0.85rem, 1.4vw, 1rem); color: #c8d8ff;
+  text-shadow: 0 0 8px rgba(68,102,255,0.7), 0 0 16px rgba(108,143,255,0.4);
+  background: linear-gradient(180deg, transparent, rgba(10,20,80,0.35)); flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Kill decorative animations but KEEP the cake-split transition (.half uses transition, not animation) */
+  .bd-root .star,
+  .bd-root .flame,
+  .bd-root .title,
+  .bd-root .subtitle,
+  .bd-root .photo-frame,
+  .bd-root .photo-frame img,
+  .bd-root .hint,
+  .bd-root .message,
+  .bd-root .name {
+    animation: none !important;
+  }
+  /* Only kill transitions on elements that aren't part of the core cut interaction */
+  .bd-root .knife,
+  .bd-root .message {
+    transition: opacity 0.3s !important;
+  }
+} /* end @media prefers-reduced-motion */
+</style>
+</head>
+<body>
+<div class="bd-root">
+
+  <div class="stars" id="stars"></div>
+  <div class="confetti-layer" id="confetti"></div>
+
+  <!-- CHANGE 1 OF 3: Replace "Sarah" with the birthday person's name -->
+  <h1 class="title">Happy Birthday, <span class="name">Suhani </span>!! 🎂</h1>
+  <p class="subtitle">A little magic, made just for you</p>
+
+  <div class="photo-frame">
+    <!-- CHANGE 2 OF 3: Replace the src URL with your own photo link -->
+    <img src="./assets/IMG_20251009_024555.jpg" alt="Birthday star" loading="eager" />
+  </div>
+
+  <audio id="audioPlayer" loop preload="auto">
+    <!-- CHANGE 3 OF 3: Replace the src URL with your own song link (mp3/ogg) -->
+    <source src="./assets/nastelbom-happy-birthday-471481.mp3" />
+  </audio>
+
+
+  <p class="hint" id="hint">✨ Drag the knife across the cake to make a wish ✨</p>
+
+  <div class="stage">
+    <div class="cake-wrap" id="cakeWrap">
+      <svg class="cake" id="cake" viewBox="0 0 400 400">
+        <defs>
+          <linearGradient id="frosting" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#5c3317" />
+            <stop offset="100%" stop-color="#3b1e0a" />
+          </linearGradient>
+          <linearGradient id="layer1" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#3d1a08" />
+            <stop offset="100%" stop-color="#1e0a02" />
+          </linearGradient>
+          <linearGradient id="layer2" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#7b3f10" />
+            <stop offset="100%" stop-color="#4a2208" />
+          </linearGradient>
+          <linearGradient id="layer3" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#a0581e" />
+            <stop offset="100%" stop-color="#6b3410" />
+          </linearGradient>
+          <linearGradient id="ganache" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#7a4520" />
+            <stop offset="100%" stop-color="#3b1e0a" />
+          </linearGradient>
+          <radialGradient id="flameGrad" cx="50%" cy="60%" r="60%">
+            <stop offset="0%" stop-color="#fff7c0" />
+            <stop offset="50%" stop-color="#ffb347" />
+            <stop offset="100%" stop-color="#ff4500" stop-opacity="0" />
+          </radialGradient>
+          <clipPath id="leftClip"><rect x="0" y="0" width="200" height="400" /></clipPath>
+          <clipPath id="rightClip"><rect x="200" y="0" width="200" height="400" /></clipPath>
+        </defs>
+
+        <ellipse cx="200" cy="360" rx="160" ry="14" fill="rgba(0,0,0,0.35)" />
+        <ellipse cx="200" cy="345" rx="170" ry="18" fill="#e8ddd0" />
+
+        <!-- LEFT HALF -->
+        <g class="half half-left" clip-path="url(#leftClip)">
+          <rect x="70" y="240" width="260" height="100" rx="8" fill="url(#layer1)" />
+          <path d="M70 245 Q82 238 96 248 Q108 240 122 250 Q136 238 150 248 Q164 238 178 248 Q192 238 200 244 L200 258 L70 258 Z" fill="url(#ganache)" />
+          <g fill="#c8860a">
+            <circle cx="100" cy="275" r="3.5" /><circle cx="130" cy="295" r="3" />
+            <circle cx="162" cy="272" r="3.5" /><circle cx="118" cy="310" r="2.5" />
+            <circle cx="152" cy="318" r="2.5" /><circle cx="185" cy="290" r="3" />
+          </g>
+          <g fill="#f0e0c0" opacity="0.75">
+            <circle cx="112" cy="286" r="2.5" /><circle cx="145" cy="308" r="2" />
+            <circle cx="175" cy="300" r="2.5" />
+          </g>
+          <rect x="100" y="180" width="200" height="70" rx="6" fill="url(#layer2)" />
+          <path d="M100 185 Q114 177 128 186 Q142 177 156 186 Q170 177 184 186 Q196 177 200 182 L200 196 L100 196 Z" fill="url(#ganache)" />
+          <g fill="#c8860a">
+            <circle cx="118" cy="208" r="3" /><circle cx="148" cy="225" r="3" />
+            <circle cx="178" cy="210" r="3" /><circle cx="135" cy="238" r="2.5" />
+          </g>
+          <g fill="#f0e0c0" opacity="0.75">
+            <circle cx="128" cy="220" r="2" /><circle cx="162" cy="232" r="2" />
+          </g>
+          <rect x="130" y="130" width="140" height="55" rx="5" fill="url(#layer3)" />
+          <path d="M130 135 Q144 127 158 136 Q172 127 186 136 Q196 127 200 132 L200 146 L130 146 Z" fill="url(#ganache)" />
+          <g fill="#c8860a">
+            <circle cx="148" cy="153" r="2.5" /><circle cx="170" cy="168" r="2.5" />
+            <circle cx="190" cy="155" r="2" />
+          </g>
+          <g>
+            <rect x="155" y="90" width="8" height="40" fill="#4466ff" />
+            <ellipse class="flame" cx="159" cy="82" rx="5" ry="10" fill="url(#flameGrad)" />
+          </g>
+          <g>
+            <rect x="185" y="100" width="8" height="30" fill="#6c8fff" />
+            <ellipse class="flame" cx="189" cy="92" rx="5" ry="10" fill="url(#flameGrad)" />
+          </g>
+        </g>
+
+        <!-- RIGHT HALF -->
+        <g class="half half-right" clip-path="url(#rightClip)">
+          <rect x="70" y="240" width="260" height="100" rx="8" fill="url(#layer1)" />
+          <path d="M200 244 Q212 238 226 248 Q240 238 254 248 Q268 238 282 248 Q296 238 310 248 Q322 240 330 245 L330 258 L200 258 Z" fill="url(#ganache)" />
+          <g fill="#c8860a">
+            <circle cx="222" cy="275" r="3.5" /><circle cx="252" cy="295" r="3" />
+            <circle cx="282" cy="272" r="3.5" /><circle cx="238" cy="310" r="2.5" />
+            <circle cx="268" cy="318" r="2.5" /><circle cx="305" cy="290" r="3" />
+          </g>
+          <g fill="#f0e0c0" opacity="0.75">
+            <circle cx="230" cy="286" r="2.5" /><circle cx="262" cy="308" r="2" />
+            <circle cx="294" cy="300" r="2.5" />
+          </g>
+          <rect x="100" y="180" width="200" height="70" rx="6" fill="url(#layer2)" />
+          <path d="M200 182 Q208 177 222 186 Q236 177 250 186 Q264 177 278 186 Q292 177 300 182 L300 196 L200 196 Z" fill="url(#ganache)" />
+          <g fill="#c8860a">
+            <circle cx="218" cy="208" r="3" /><circle cx="248" cy="225" r="3" />
+            <circle cx="278" cy="210" r="3" /><circle cx="235" cy="238" r="2.5" />
+          </g>
+          <g fill="#f0e0c0" opacity="0.75">
+            <circle cx="228" cy="220" r="2" /><circle cx="262" cy="232" r="2" />
+          </g>
+          <rect x="130" y="130" width="140" height="55" rx="5" fill="url(#layer3)" />
+          <path d="M200 132 Q208 127 222 136 Q236 127 250 136 Q262 127 270 132 L270 146 L200 146 Z" fill="url(#ganache)" />
+          <g fill="#c8860a">
+            <circle cx="218" cy="153" r="2.5" /><circle cx="242" cy="168" r="2.5" />
+            <circle cx="262" cy="155" r="2" />
+          </g>
+          <g>
+            <rect x="215" y="95" width="8" height="35" fill="#a0b8ff" />
+            <ellipse class="flame" cx="219" cy="87" rx="5" ry="10" fill="url(#flameGrad)" />
+          </g>
+          <g>
+            <rect x="240" y="88" width="8" height="42" fill="#dde6ff" />
+            <ellipse class="flame" cx="244" cy="80" rx="5" ry="10" fill="url(#flameGrad)" />
+          </g>
+        </g>
+
+        <line id="cutLine" x1="200" y1="200" x2="200" y2="200" stroke="#c8d8ff" stroke-width="3" stroke-linecap="round" opacity="0" />
+      </svg>
+
+      <div class="knife" id="knife" style="left:50%; top:55%;">
+        <svg viewBox="0 0 200 200">
+          <rect x="20" y="92" width="70" height="22" rx="6" fill="#3a2010" />
+          <rect x="86" y="88" width="10" height="30" rx="2" fill="#888" />
+          <polygon points="96,90 190,98 190,108 96,116" fill="#cfd8e3" stroke="#5a6470" stroke-width="1" />
+          <polygon points="96,90 190,98 190,102 96,94" fill="#fff" opacity="0.6" />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="message" id="message">
+    <h2>Wishing you a day as sweet as this cake! 🎉</h2>
+    <p>May this year overflow with laughter, magic, and every dream coming true.</p>
+    <p style="margin-top:.6rem; font-style:italic; color:#a0b8ff;">Love you tons! 💙</p>
+    <div class="hearts">💙 ✨ 🎂 ✨ 💜</div>
+    <button class="replay-btn" id="replayBtn">🔄 Again?</button>
+  </div>
+
+  <footer class="bd-footer">Made By - Ishan</footer>
+
+</div>
+
+<script>
+(function () {
+  const host = document.querySelector(".bd-root");
+  const COLORS = ["#4466ff", "#6c8fff", "#a0b8ff", "#dde6ff", "#c8a84b", "#7b9fff"];
+
+  // ── Stars ───────────────────────────────────────────────────────────────────
+  const starsEl = host.querySelector("#stars");
+  for (let i = 0; i < 80; i++) {
+    const s = document.createElement("span");
+    s.className = "star";
+    const size    = Math.random() * 3 + 1;
+    const color   = COLORS[Math.floor(Math.random() * COLORS.length)];
+    const fallDur = Math.random() * 8 + 6;
+    s.style.cssText =
+      `left:${Math.random() * 100}%; top:0; width:${size}px; height:${size}px;` +
+      `background:${color}; box-shadow:0 0 6px ${color}, 0 0 12px ${color};` +
+      `animation-duration:${fallDur}s, ${Math.random() * 2 + 1}s;` +
+      `animation-delay:-${Math.random() * fallDur}s, 0s;`;
+    starsEl.appendChild(s);
+  }
+
+  // ── DOM refs ─────────────────────────────────────────────────────────────────
+  const audioPlayer   = host.querySelector("#audioPlayer");
+  const replayBtn     = host.querySelector("#replayBtn");
+  const knife         = host.querySelector("#knife");
+  const wrap          = host.querySelector("#cakeWrap");
+  const cake          = host.querySelector("#cake");
+  const cutLine       = host.querySelector("#cutLine");
+  const hint          = host.querySelector("#hint");
+  const message       = host.querySelector("#message");
+  const confettiLayer = host.querySelector("#confetti");
+
+  // ── iOS Audio Unlock ──────────────────────────────────────────────────────────
+  // Safari only allows audio.play() from a direct gesture (pointerdown/touchstart).
+  // We silently unlock the audio context on the knife's pointerdown — the same tap
+  // that starts a cut — so by the time completeCut() calls playAudio() it's already
+  // unlocked and plays without error on iOS.
+  let audioUnlocked = false;
+  function unlockAudio() {
+    if (audioUnlocked) return;
+    audioPlayer.play().then(() => {
+      audioPlayer.pause();
+      audioPlayer.currentTime = 0;
+      audioUnlocked = true;
+    }).catch(() => { audioUnlocked = true; });
+  }
+
+
+  // ── Cake geometry constants (SVG viewBox 0..400) ──────────────────────────
+  const TOP_ENTRY_Y     = 160;  // knife must enter at or above this Y to start a cut
+  const BOT_Y           = 330;  // reaching this Y completes the cut
+  const RESET_DELTA_VBOX = 20;  // upward movement (in vbox units) that cancels a cut
+  const SMOOTH_N        = 4;    // rolling-average window size for Y smoothing
+
+  // ── Mutable cut state ────────────────────────────────────────────────────────
+  let dragging       = false;
+  let cutDone        = false;
+  let cutActive      = false;
+  let cutStartY      = null;  // vboxY where cut began
+  let currentMaxDepth = null; // deepest vboxY reached this drag
+  let prevSmoothedY  = null;  // previous frame's smoothed relY (for reset check)
+  let yBuf           = [];    // smoothing buffer
+
+  // ── Helpers ──────────────────────────────────────────────────────────────────
+  function smoothY(rawY) {
+    yBuf.push(rawY);
+    if (yBuf.length > SMOOTH_N) yBuf.shift();
+    return yBuf.reduce((a, b) => a + b, 0) / yBuf.length;
+  }
+
+  function resetCutState() {
+    cutActive       = false;
+    cutStartY       = null;
+    currentMaxDepth = null;
+    prevSmoothedY   = null;
+    yBuf            = [];
+    cutLine.setAttribute("opacity", "0");
+  }
+
+  function spawnConfetti(x, y, count = 40) {
+    for (let i = 0; i < count; i++) {
+      const el    = document.createElement("div");
+      el.className = "firework";
+      const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+      el.style.cssText = `left:${x}px; top:${y}px; background:${color}; box-shadow:0 0 8px ${color};`;
+      const ang  = Math.random() * Math.PI * 2;
+      const dist = Math.random() * 220 + 60;
+      el.animate(
+        [
+          { transform: "translate(0,0) scale(1)",                                          opacity: 1 },
+          { transform: `translate(${Math.cos(ang)*dist}px,${Math.sin(ang)*dist+200}px) scale(0)`, opacity: 0 }
+        ],
+        { duration: 1400 + Math.random() * 800, easing: "cubic-bezier(.2,.6,.4,1)" }
+      );
+      confettiLayer.appendChild(el);
+      // No IIFE needed — `el` is block-scoped with `const`, so each iteration has its own binding
+      setTimeout(() => { if (el.parentNode) el.parentNode.removeChild(el); }, 2400);
+    }
+  }
+
+  function playAudio() {
+    audioPlayer.currentTime = 0;
+    // Audio context already unlocked by the knife pointerdown on iOS.
+    // On desktop this just plays normally.
+    audioPlayer.play().catch(() => {});
+  }
+
+  // ── Reset / Replay ──────────────────────────────────────────────────────────
+  function resetAll() {
+    // State
+    dragging = false;
+    cutDone  = false;
+    resetCutState();
+
+    // Audio
+    audioPlayer.pause();
+    audioPlayer.currentTime = 0;
+
+    // UI
+    cake.classList.remove("cut");
+    message.classList.remove("show");
+    knife.classList.remove("gone", "dragging");
+    knife.style.left = "50%";
+    knife.style.top  = "55%";
+    hint.style.display = "";
+
+    // Clear leftover confetti particles
+    confettiLayer.innerHTML = "";
+  }
+
+  // ── Complete cut ─────────────────────────────────────────────────────────────
+  function completeCut() {
+    if (cutDone) return;
+    cutDone = true;
+    playAudio();
+    cake.classList.add("cut");
+    knife.classList.add("gone");
+
+    const w = window.innerWidth, h = window.innerHeight;
+    spawnConfetti(w / 2, h / 2, 80);
+
+    setTimeout(() => {
+      message.classList.add("show");
+      let n = 0;
+      const t = setInterval(() => {
+        spawnConfetti(Math.random() * w, Math.random() * h * 0.6 + h * 0.1, 30);
+        if (++n > 5) clearInterval(t);
+      }, 280);
+    }, 900);
+  }
+
+  // ── Knife positioning & cut detection ────────────────────────────────────────
+  function setKnife(clientX, clientY) {
+    const r    = wrap.getBoundingClientRect();
+    let relX   = (clientX - r.left) / r.width;
+    let relY   = (clientY - r.top)  / r.height;
+
+    relX = Math.max(0, Math.min(1, relX));
+    relY = Math.max(0, Math.min(1, relY));
+    knife.style.left = `${relX * 100}%`;
+    knife.style.top  = `${relY * 100}%`;
+
+    if (cutDone) return;
+
+    const insideHoriz = relX >= 0.2 && relX <= 0.8;
+    const insideVert  = relY >= 0.05 && relY <= 0.98;
+
+    if (!insideHoriz || !insideVert) {
+      if (cutActive) resetCutState();
+      return;
+    }
+
+    const smoothedRelY = smoothY(relY);
+    const vboxY        = smoothedRelY * 400;
+
+    if (!cutActive) {
+      // Only begin a cut if knife enters from the top of the cake
+      if (vboxY <= TOP_ENTRY_Y) {
+        cutActive       = true;
+        cutStartY       = vboxY;
+        currentMaxDepth = vboxY;
+        prevSmoothedY   = smoothedRelY;
+        cutLine.setAttribute("x1", "200");
+        cutLine.setAttribute("x2", "200");
+        cutLine.setAttribute("y1", String(cutStartY));
+        cutLine.setAttribute("y2", String(currentMaxDepth));
+        cutLine.setAttribute("opacity", "0.85");
+      }
+      return;
+    }
+
+    // Cancel cut on significant upward movement
+    if (vboxY < prevSmoothedY * 400 - RESET_DELTA_VBOX) {
+      resetCutState();
+      return;
+    }
+    prevSmoothedY = smoothedRelY;
+
+    // Extend cut line downward only
+    if (vboxY > currentMaxDepth) {
+      currentMaxDepth = vboxY;
+      cutLine.setAttribute("y1", String(cutStartY));
+      cutLine.setAttribute("y2", String(currentMaxDepth));
+    }
+
+    if (currentMaxDepth >= BOT_Y) completeCut();
+  }
+
+  // ── Pointer events ────────────────────────────────────────────────────────────
+  function onDown(e) {
+    unlockAudio(); // called synchronously inside pointerdown — iOS Safari trusts this
+    if (cutDone) return;
+    dragging = true;
+    resetCutState();
+    hint.style.display = "none";
+    if (knife.setPointerCapture) knife.setPointerCapture(e.pointerId);
+    knife.classList.add("dragging");
+    setKnife(e.clientX, e.clientY);
+    e.preventDefault();
+  }
+
+  function onMove(e) {
+    if (!dragging || cutDone) return;
+    e.preventDefault();
+    setKnife(e.clientX, e.clientY);
+  }
+
+  function onUp(e) {
+    dragging = false;
+    if (!cutDone) resetCutState();
+    knife.classList.remove("dragging");
+    if (knife.releasePointerCapture) knife.releasePointerCapture(e.pointerId);
+  }
+
+  knife.addEventListener("pointerdown", onDown);
+  window.addEventListener("pointermove", onMove);
+  window.addEventListener("pointerup", onUp);
+  window.addEventListener("pointercancel", onUp);
+
+  // Prevent page scroll while cutting on touch devices
+  window.addEventListener("touchmove", (e) => {
+    if (dragging && !cutDone) e.preventDefault();
+  }, { passive: false });
+
+  // ── Audio / Visibility ───────────────────────────────────────────────────────
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden && !audioPlayer.paused) audioPlayer.pause();
+  });
+
+  // ── Replay button ─────────────────────────────────────────────────────────────
+  replayBtn.addEventListener("click", resetAll);
+
+})();
+</script>
+</body>
+</html>
